@@ -8,5 +8,6 @@
   "iso_name": "CentOS-7-x86_64-DVD-1511.iso",
   "iso_url": "http://mirrors.sonic.net/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso",
   "kickstart": "ks7.cfg",
+  "version": "0.1.0",
   "memory": "1024",
 }

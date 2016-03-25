@@ -104,6 +104,6 @@
     "vagrantfile_template": "",
     "version": "0.1.0",
     "virtualbox_guest_os_type": "RedHat_64",
-    "vm_name": "gd-centos-6.7",
+    "vm_name": "gd-centos-6.7"
   }
 }

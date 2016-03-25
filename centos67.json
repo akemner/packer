@@ -113,7 +113,7 @@
     "ssh_username": "vagrant",
     "update": "false",
     "vagrantfile_template": "centos67.json",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "virtualbox_guest_os_type": "RedHat_64",
     "vm_name": "gd-centos-6.7",
     "atlas_username": "gannett",

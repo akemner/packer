@@ -59,7 +59,6 @@
       "environment_vars": [
         "CM={{user `cm`}}",
         "CM_VERSION={{user `cm_version`}}",
-        "DESKTOP={{user `desktop`}}",
         "DOCKER={{user `docker`}}",
         "UPDATE={{user `update`}}",
         "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
@@ -73,11 +72,9 @@
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "script/fix-slow-dns.sh",
         "script/sshd.sh",
         "script/update.sh",
         "script/vagrant.sh",
-        "script/virtualbox.sh",
         "script/cmtool.sh",
         "script/docker.sh",
         "script/motd.sh",
@@ -87,11 +84,9 @@
     }
   ],
   "variables": {
-    "cm": "nocm",
-    "cm_version": "",
+    "cm": "chef",
+    "cm_version": "12.5.1",
     "cpus": "1",
-    "cutom_script": ".",
-    "desktop": "false",
     "disk_size": "8192",
     "docker": "false",
     "ftp_proxy": "{{env `ftp_proxy`}}",
@@ -111,7 +106,7 @@
     "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
-    "update": "false",
+    "update": "true",
     "vagrantfile_template": "centos67.json",
     "version": "0.1.1",
     "virtualbox_guest_os_type": "RedHat_64",

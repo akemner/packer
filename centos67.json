@@ -6,7 +6,6 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
@@ -50,7 +49,8 @@
       "metadata": {
         "provider": "virtualbox",
         "version": "{{user `version`}}",
-        "created_at": "{{timestamp}}"
+        "created_at": "{{timestamp}}",
+        "auto_release": false
       }
     }
   ],
@@ -94,12 +94,8 @@
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
-    "iso_checksum": "7bb8c1c23a4fdef93e6f0a6347d570e5764d0b38",
     "iso_checksum_type": "sha1",
-    "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
     "iso_path": "/Volumes/Thunder/software/centos",
-    "iso_url": "http://mirrors.kernel.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
-    "kickstart": "ks6.cfg",
     "memory": "1024",
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
@@ -110,8 +106,12 @@
     "vagrantfile_template": "centos67.json",
     "version": "0.1.1",
     "virtualbox_guest_os_type": "RedHat_64",
-    "vm_name": "gd-centos-6.7",
     "atlas_username": "gannett",
-    "atlas_token": ""
+    "atlas_token": "",
+    "kickstart": "ks6.cfg",
+    "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
+    "iso_url": "http://mirrors.kernel.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
+    "iso_checksum": "7bb8c1c23a4fdef93e6f0a6347d570e5764d0b38",
+    "vm_name": "gd-centos-6.7"
   }
 }

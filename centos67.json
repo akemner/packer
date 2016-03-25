@@ -41,6 +41,17 @@
       "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `cm`}}{{user `cm_version`}}-{{user `version`}}.box",
       "type": "vagrant",
       "vagrantfile_template": "{{ user `vagrantfile_template` }}"
+    },
+    {
+      "type": "atlas",
+      "only": ["virtualbox-iso"],
+      "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox",
+        "version": "{{user `version`}}",
+        "created_at": "{{timestamp}}"
+      }
     }
   ],
   "provisioners": [
@@ -101,9 +112,11 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "false",
-    "vagrantfile_template": "",
+    "vagrantfile_template": "centos67.json",
     "version": "0.1.0",
     "virtualbox_guest_os_type": "RedHat_64",
-    "vm_name": "gd-centos-6.7"
+    "vm_name": "gd-centos-6.7",
+    "atlas_username": "gannett",
+    "atlas_token": ""
   }
 }

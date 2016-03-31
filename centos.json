@@ -41,6 +41,18 @@
       "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `cm`}}{{user `cm_version`}}-{{user `version`}}.box",
       "type": "vagrant",
       "vagrantfile_template": "{{ user `vagrantfile_template` }}"
+    },
+    {
+      "type": "atlas",
+      "only": ["virtualbox-iso"],
+      "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox",
+        "version": "{{user `version`}}",
+        "created_at": "{{timestamp}}",
+        "auto_release": false
+      }
     }
   ],
   "provisioners": [
@@ -79,7 +91,7 @@
     "disk_size": "8192",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "guest_additions_mode": "disable",
-    "headless": "false",
+    "headless": "true",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
@@ -95,12 +107,12 @@
     "vagrantfile_template": "centos.json",
     "version": "",
     "virtualbox_guest_os_type": "RedHat_64",
-    "atlas_username": "gannett",
+    "atlas_username": "akemner",
     "atlas_token": "",
     "kickstart": "ks6.cfg",
     "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
     "iso_url": "http://mirrors.kernel.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
     "iso_checksum": "7bb8c1c23a4fdef93e6f0a6347d570e5764d0b38",
-    "vm_name": "gd-centos-6.7"
+    "vm_name": "centos"
   }
 }

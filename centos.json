@@ -73,10 +73,10 @@
         "script/sshd.sh",
         "script/update.sh",
         "script/vagrant.sh",
-        "script/motd.sh.sh"
+        "script/motd.sh"
       ],
       "type": "shell"
-    }
+    },
     { "type": "file", "source": "{{user `local_chef_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "{{user `local_chef_dir`}}/roles", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "{{user `local_chef_dir`}}/data_bags", "destination": "{{user `chef_dir`}}" },

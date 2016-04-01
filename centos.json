@@ -56,10 +56,6 @@
     ]
   ],
   "provisioners": [
-    { "type": "file", "source": "{{user `local_chef_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `local_chef_dir`}}/roles", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `local_chef_dir`}}/data_bags", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `local_chef_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
     {
       "environment_vars": [
         "UPDATE={{user `update`}}",
@@ -77,6 +73,17 @@
         "script/sshd.sh",
         "script/update.sh",
         "script/vagrant.sh",
+        "script/motd.sh.sh",
+      ],
+      "type": "shell"
+    }
+    { "type": "file", "source": "{{user `local_chef_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/roles", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/data_bags", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
         "script/cleanup.sh"
       ],
       "type": "shell"

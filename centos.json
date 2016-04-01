@@ -37,6 +37,10 @@
   ],
   "post-processors": [
     {
+      "type": "vagrant",
+      "keep_input_artifact": false
+    },
+    {
       "type": "atlas",
       "only": ["virtualbox-iso"],
       "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
@@ -45,7 +49,7 @@
         "provider": "virtualbox",
         "version": "{{user `version`}}",
         "created_at": "{{timestamp}}",
-        "auto_release": "false"
+        "auto_release": false
       }
     }
   ],

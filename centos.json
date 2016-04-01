@@ -73,7 +73,7 @@
         "script/sshd.sh",
         "script/update.sh",
         "script/vagrant.sh",
-        "script/motd.sh.sh",
+        "script/motd.sh.sh"
       ],
       "type": "shell"
     }

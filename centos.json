@@ -50,7 +50,7 @@
           "provider": "virtualbox",
           "version": "{{user `version`}}",
           "created_at": "{{timestamp}}",
-          "auto_release": "false"
+          "auto_release": false
         }
       }
     ]
@@ -105,7 +105,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "centos.json",
-    "version": "0.12.0",
+    "version": "0.14.0",
     "virtualbox_guest_os_type": "RedHat_64",
     "atlas_username": "akemner",
     "atlas_token": "",

@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 if [[ $UPDATE  =~ true || $UPDATE =~ 1 || $UPDATE =~ yes ]]; then
     echo "==> Applying updates"
-    yum -y update
+    yum -y update --security
 
     # reboot
     echo "Rebooting the machine..."

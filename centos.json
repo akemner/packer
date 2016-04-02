@@ -70,10 +70,9 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "script/sshd.sh",
-        "script/virtualbox.sh",
         "script/vagrant.sh",
-        "script/motd.sh",
-        "script/update.sh"
+        "script/update.sh",
+        "script/virtualbox.sh"
       ],
       "type": "shell"
     },
@@ -84,6 +83,7 @@
     {
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
+        "script/motd.sh",
         "script/cleanup.sh"
       ],
       "type": "shell"
@@ -111,7 +111,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "centos.json",
-    "version": "0.21.0",
+    "version": "0.22.0",
     "virtualbox_guest_os_type": "RedHat_64",
     "atlas_username": "akemner",
     "atlas_token": "",

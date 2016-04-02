@@ -111,7 +111,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "centos.json",
-    "version": "0.20.0",
+    "version": "0.21.0",
     "virtualbox_guest_os_type": "RedHat_64",
     "atlas_username": "akemner",
     "atlas_token": "",

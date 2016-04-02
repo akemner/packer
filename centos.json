@@ -72,7 +72,7 @@
         "script/sshd.sh",
         "script/vagrant.sh",
         "script/update.sh",
-        "script/virtualbox-prerequisites.sh.sh",
+        "script/virtualbox-prerequisites.sh",
         "script/virtualbox.sh"
       ],
       "type": "shell"

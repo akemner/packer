@@ -21,5 +21,5 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
     fi
 
     echo "==> Removing packages needed for building guest tools"
-    yum -y remove gcc cpp libmpc mpfr kernel-devel kernel-headers perl
+    yum -y remove gcc cpp libmpc mpfr kernel-devel kernel-headers
 fi

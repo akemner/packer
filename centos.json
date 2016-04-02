@@ -72,6 +72,7 @@
         "script/sshd.sh",
         "script/vagrant.sh",
         "script/update.sh",
+        "script/virtualbox-prerequisites.sh.sh",
         "script/virtualbox.sh"
       ],
       "type": "shell"
@@ -111,7 +112,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "centos.json",
-    "version": "0.25.0",
+    "version": "0.26.0",
     "virtualbox_guest_os_type": "RedHat_64",
     "atlas_username": "akemner",
     "atlas_token": "",

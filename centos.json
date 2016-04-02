@@ -6,7 +6,6 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
-      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
@@ -70,9 +69,10 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "script/sshd.sh",
-        "script/update.sh",
+        "script/virtualbox.sh",
         "script/vagrant.sh",
-        "script/motd.sh"
+        "script/motd.sh",
+        "script/update.sh"
       ],
       "type": "shell"
     },
@@ -96,7 +96,6 @@
     "cpus": "1",
     "disk_size": "8192",
     "ftp_proxy": "{{env `ftp_proxy`}}",
-    "guest_additions_mode": "disable",
     "headless": "true",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
@@ -111,7 +110,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "centos.json",
-    "version": "0.18.0",
+    "version": "0.20.0",
     "virtualbox_guest_os_type": "RedHat_64",
     "atlas_username": "akemner",
     "atlas_token": "",

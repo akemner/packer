@@ -69,7 +69,7 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "script/sshd.sh",
-        "script/update.sh",
+        "script/update.sh"
       ],
       "type": "shell"
     },

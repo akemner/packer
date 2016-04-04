@@ -1,12 +1,12 @@
 {
-  "_comment": "Build with `packer build centos.json`",
+  "_comment": "",
   "builders": [
     {
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
-      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
@@ -21,7 +21,7 @@
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
+      "ssh_wait_timeout": "300s",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -35,8 +35,9 @@
       "vm_name": "{{ user `vm_name` }}"
     }
   ],
-  "post-processors": [
-    {
+ "post-processors": [
+    [
+      {
       "type": "amazon-import",
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
@@ -44,58 +45,19 @@
       "s3_bucket_name": "importbucket",
       "tags": {
         "OS_Version": "{{ user `os_version_tag` }}",
-        "Description": "packer amazon-import {{timestamp}}",
+        "Description": "built with packer amazon-import {{timestamp}}",
         "Version": "{{user `version`}}",
+        "Created": "{{timestamp}}",
         "Name": "{{user `name_tag` }}",
         "OWNER": "{{user `owner_tag` }}"
       }
-    },
-    {
-      "keep_input_artifact": false,
-      "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `cm`}}{{user `cm_version`}}-{{user `version`}}.box",
-      "type": "vagrant",
-      "vagrantfile_template": "{{ user `vagrantfile_template` }}"
-    },
-    {
-      "type": "atlas",
-      "only": ["virtualbox-iso"],
-      "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
-      "artifact_type": "vagrant.box",
-      "metadata": {
-        "provider": "virtualbox",
-        "version": "{{user `version`}}",
-        "created_at": "{{timestamp}}",
-        "auto_release": false
-      }
     }
+    ]
   ],
   "provisioners": [
-    { "type": "file", "source": "{{user `local_chef_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `local_chef_dir`}}/roles", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `local_chef_dir`}}/data_bags", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `local_chef_dir`}}/environments", "destination": "{{user `chef_dir`}}" }
-    {
-      "type": "chef-client",
-      "server_url": "{{user `chef_server_url` }}",
-      "run_list": "{{user `chef_run_list` }}",
-      "config_template"   : "templates/client.rb.template",
-      "install_command": "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v {{user `chef_version` }}"
-    },
-    {
-      "type": "file",
-      "source": "test/{{user `suite_name` }}",
-      "destination": "/tmp"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "sudo mv /tmp/{{user `suite_name` }} /tmp/test"
-      ]
-    },
     {
       "environment_vars": [
         "UPDATE={{user `update`}}",
-        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
         "SSH_PASSWORD={{user `ssh_password`}}",
         "http_proxy={{user `http_proxy`}}",
@@ -108,37 +70,41 @@
       "scripts": [
         "script/sshd.sh",
         "script/update.sh",
-        "script/vagrant.sh",
-        "script/serverspec.sh",
+      ],
+      "type": "shell"
+    },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/roles", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/data_bags", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
         "script/cleanup.sh"
       ],
       "type": "shell"
     }
   ],
   "variables": {
-    "PACKER_LOG": "1",
-    "chef_server_url": "http://localhost:8889",
-    "chef_run_list": "{{env `CHEF_RUN_LIST` }}",
-    "chef_version": "12.5.1",
-    "local_chef_dir": "{{env `CHEF_REPO_DIR`}}",
-    "chef_dir": "/tmp/packer-chef-client",
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID` }}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY` }}",
-    "name_tag": "{{env `AWS_NAME_TAG` }}",
-    "owner_tag": "{{env `AWS_OWNER_TAG` }}",
-    "os_version_tag": "{{env `AWS_OS_VERSION_TAG` }}",
-    "region": "{{env `AWS_REGION` }}",
+    "name_tag": "{{user `vm_name` }}-{{user `version`}}",
+    "owner_tag": "PaaS-Delivery",
+    "region": "us-east-1",
     "suite_name": "{{env `SUITE_NAME` }}",
+    "chef_server_url": "http://localhost:8889",
+    "chef_version": "12.5.1",
+    "local_chef_dir": "chef-repo",
+    "chef_dir": "/tmp/packer-chef-client",
     "cpus": "1",
     "disk_size": "8192",
     "ftp_proxy": "{{env `ftp_proxy`}}",
-    "guest_additions_mode": "disable",
     "headless": "true",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
     "iso_checksum_type": "sha1",
-    "iso_path": "/Volumes/Thunder/software/centos",
+    "iso_path": "",
     "memory": "1024",
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
@@ -146,15 +112,14 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "true",
-    "vagrantfile_template": "centos67.json",
-    "version": "",
+    "vagrantfile_template": "",
+    "version": "0.26.1",
     "virtualbox_guest_os_type": "RedHat_64",
-    "atlas_username": "gannett",
-    "atlas_token": "",
-    "kickstart": "ks6.cfg",
-    "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
-    "iso_url": "http://mirrors.kernel.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
-    "iso_checksum": "7bb8c1c23a4fdef93e6f0a6347d570e5764d0b38",
-    "vm_name": "gd-centos-6.7"
+    "kickstart": "ks7.cfg",
+    "iso_name": "CentOS-7-x86_64-DVD-1511.iso",
+    "iso_url": "http://mirrors.sonic.net/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso",
+    "iso_checksum": "4c6c65b5a70a1142dadb3c65238e9e97253c0d3a",
+    "vm_name": "gd-centos-7.2-amazon_import",
+    "os_version_tag": "centos-7.2"
   }
 }

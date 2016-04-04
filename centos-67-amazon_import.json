@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build centos.json`",
+  "_comment": "",
   "builders": [
     {
       "boot_command": [
@@ -21,7 +21,7 @@
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
+      "ssh_wait_timeout": "300s",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -38,27 +38,26 @@
  "post-processors": [
     [
       {
-        "type": "vagrant",
-        "keep_input_artifact": false
-      },
-      {
-        "type":"atlas",
-        "only": ["virtualbox-iso"],
-        "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
-        "artifact_type": "vagrant.box",
-        "metadata": {
-          "provider": "virtualbox",
-          "version": "{{user `version`}}",
-          "created_at": "{{timestamp}}"
-        }
+      "type": "amazon-import",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "{{ user `region` }}",
+      "s3_bucket_name": "importbucket",
+      "tags": {
+        "OS_Version": "{{ user `os_version_tag` }}",
+        "Description": "built with packer amazon-import {{timestamp}}",
+        "Version": "{{user `version`}}",
+        "Created": "{{timestamp}}",
+        "Name": "{{user `name_tag` }}",
+        "OWNER": "{{user `owner_tag` }}"
       }
+    }
     ]
   ],
   "provisioners": [
     {
       "environment_vars": [
         "UPDATE={{user `update`}}",
-        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
         "SSH_PASSWORD={{user `ssh_password`}}",
         "http_proxy={{user `http_proxy`}}",
@@ -70,10 +69,7 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "script/sshd.sh",
-        "script/vagrant.sh",
         "script/update.sh",
-        "script/virtualbox-prerequisites.sh",
-        "script/virtualbox.sh"
       ],
       "type": "shell"
     },
@@ -84,13 +80,18 @@
     {
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "script/motd.sh",
         "script/cleanup.sh"
       ],
       "type": "shell"
     }
   ],
   "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID` }}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY` }}",
+    "name_tag": "{{user `vm_name` }}-{{user `version`}}",
+    "owner_tag": "PaaS-Delivery",
+    "region": "us-east-1",
+    "suite_name": "{{env `SUITE_NAME` }}",
     "chef_server_url": "http://localhost:8889",
     "chef_version": "12.5.1",
     "local_chef_dir": "chef-repo",
@@ -111,15 +112,14 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "true",
-    "vagrantfile_template": "centos.json",
+    "vagrantfile_template": "",
     "version": "0.26.1",
     "virtualbox_guest_os_type": "RedHat_64",
-    "atlas_username": "akemner",
-    "atlas_token": "",
     "kickstart": "ks6.cfg",
     "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
     "iso_url": "http://mirrors.kernel.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
     "iso_checksum": "7bb8c1c23a4fdef93e6f0a6347d570e5764d0b38",
-    "vm_name": "centos"
+    "vm_name": "gd-centos-6.7-amazon_import",
+    "os_version_tag": "centos-6.7"
   }
 }

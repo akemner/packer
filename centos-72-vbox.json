@@ -6,7 +6,7 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
-      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
@@ -21,7 +21,7 @@
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
+      "ssh_wait_timeout": "300s",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -35,32 +35,28 @@
       "vm_name": "{{ user `vm_name` }}"
     }
   ],
-  "post-processors": [
-    {
-      "keep_input_artifact": false,
-      "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `cm`}}{{user `cm_version`}}-{{user `version`}}.box",
-      "type": "vagrant",
-      "vagrantfile_template": "{{ user `vagrantfile_template` }}"
-    },
-    {
-      "type": "atlas",
-      "only": ["virtualbox-iso"],
-      "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
-      "artifact_type": "vagrant.box",
-      "metadata": {
-        "provider": "virtualbox",
-        "version": "{{user `version`}}",
-        "created_at": "{{timestamp}}",
-        "auto_release": false
+ "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": false
+      },
+      {
+        "type":"atlas",
+        "only": ["virtualbox-iso"],
+        "artifact": "{{user `atlas_username`}}/{{user `vm_name`}}",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "virtualbox",
+          "version": "{{user `version`}}",
+          "created_at": "{{timestamp}}"
+        }
       }
-    }
+    ]
   ],
   "provisioners": [
     {
       "environment_vars": [
-        "CM={{user `cm`}}",
-        "CM_VERSION={{user `cm_version`}}",
-        "DOCKER={{user `docker`}}",
         "UPDATE={{user `update`}}",
         "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
@@ -74,10 +70,20 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "script/sshd.sh",
-        "script/update.sh",
         "script/vagrant.sh",
-        "script/cmtool.sh",
-        "script/docker.sh",
+        "script/update.sh",
+        "script/virtualbox-prerequisites.sh",
+        "script/virtualbox.sh"
+      ],
+      "type": "shell"
+    },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/roles", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/data_bags", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `local_chef_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
         "script/motd.sh",
         "script/cleanup.sh"
       ],
@@ -85,19 +91,19 @@
     }
   ],
   "variables": {
-    "cm": "chef",
-    "cm_version": "12.5.1",
+    "chef_server_url": "http://localhost:8889",
+    "chef_version": "12.5.1",
+    "local_chef_dir": "chef-repo",
+    "chef_dir": "/tmp/packer-chef-client",
     "cpus": "1",
     "disk_size": "8192",
-    "docker": "false",
     "ftp_proxy": "{{env `ftp_proxy`}}",
-    "guest_additions_mode": "disable",
     "headless": "true",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
     "iso_checksum_type": "sha1",
-    "iso_path": "/Volumes/Thunder/software/centos",
+    "iso_path": "",
     "memory": "1024",
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
@@ -105,15 +111,15 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "true",
-    "vagrantfile_template": "centos67.json",
-    "version": "0.1.2",
+    "vagrantfile_template": "",
+    "version": "0.26.1",
     "virtualbox_guest_os_type": "RedHat_64",
-    "atlas_username": "gannett",
+    "atlas_username": "akemner",
     "atlas_token": "",
     "kickstart": "ks7.cfg",
     "iso_name": "CentOS-7-x86_64-DVD-1511.iso",
     "iso_url": "http://mirrors.sonic.net/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso",
     "iso_checksum": "4c6c65b5a70a1142dadb3c65238e9e97253c0d3a",
-    "vm_name": "gd-centos-7.2"
+    "vm_name": "centos-7.2"
   }
 }

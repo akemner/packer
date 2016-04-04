@@ -21,7 +21,7 @@
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "300s",
+      "ssh_wait_timeout": "600s",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -112,9 +112,9 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "",
-    "version": "0.26.1",
+    "version": "0.1.0",
     "virtualbox_guest_os_type": "RedHat_64",
-    "atlas_username": "akemner",
+    "atlas_username": "gannett",
     "atlas_token": "",
     "kickstart": "ks7.cfg",
     "iso_name": "CentOS-7-x86_64-DVD-1511.iso",

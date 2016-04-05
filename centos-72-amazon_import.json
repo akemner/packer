@@ -113,7 +113,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "virtualbox_guest_os_type": "RedHat_64",
     "kickstart": "ks7.cfg",
     "iso_name": "CentOS-7-x86_64-DVD-1511.iso",

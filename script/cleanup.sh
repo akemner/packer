@@ -71,6 +71,9 @@ yum -y --enablerepo='*' clean all
 echo "==> Clear core files"
 rm -f /core*
 
+echo "==> Clean up history"
+find /root/.*history /home/*/.*history | xargs -i rm -f {}
+
 echo "==> Removing temporary files used to build box"
 rm -rf /tmp/*
 

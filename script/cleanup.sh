@@ -13,6 +13,11 @@ if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ] ; then
     sed -i "/^UUID/d" /etc/sysconfig/network-scripts/ifcfg-eth0
 fi
 
+# remove machine-id for centos7
+if grep -q -i "release 7" /etc/redhat-release ; then
+rm -rf /etc/machine-id
+fi
+
 # new-style network device naming for centos7
 if grep -q -i "release 7" /etc/redhat-release ; then
   # radio off & remove all interface configration
@@ -80,6 +85,9 @@ rm -rf /tmp/*
 echo "==> Rebuild RPM DB"
 rpmdb --rebuilddb
 rm -f /var/lib/rpm/__db*
+
+echo '==> Cleaning out logs'
+find /var/log -type f -delete
 
 echo '==> Clear out swap and disable until reboot'
 set +e

@@ -22,6 +22,7 @@
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_wait_timeout": "600s",
+      "format":  "ova",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -42,7 +43,7 @@
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
       "region": "{{ user `region` }}",
-      "s3_bucket_name": "importbucket",
+      "s3_bucket_name": "gannett-image-import",
       "tags": {
         "OS_Version": "{{ user `os_version_tag` }}",
         "Description": "built with packer amazon-import {{timestamp}}",

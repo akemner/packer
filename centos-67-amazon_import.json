@@ -49,7 +49,7 @@
         "Description": "built with packer amazon-import {{timestamp}}",
         "Version": "{{user `version`}}",
         "Created": "{{timestamp}}",
-        "Name": "{{user `name_tag` }}",
+        "Name": "{{user `vm_name` }}-{{user `version`}}",
         "OWNER": "{{user `owner_tag` }}"
       }
     }
@@ -95,7 +95,6 @@
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID` }}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY` }}",
-    "name_tag": "{{user `vm_name` }}-{{user `version`}}",
     "owner_tag": "PaaS-Delivery",
     "region": "us-east-1",
     "suite_name": "{{env `SUITE_NAME` }}",

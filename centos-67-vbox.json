@@ -49,6 +49,7 @@
         "metadata": {
           "provider": "virtualbox",
           "version": "{{user `version`}}",
+          "status": "unreleased",
           "created_at": "{{timestamp}}"
         }
       }

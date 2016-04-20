@@ -49,6 +49,7 @@
         "metadata": {
           "provider": "virtualbox",
           "version": "{{user `version`}}",
+          "no_release": "true",
           "created_at": "{{timestamp}}"
         }
       }
@@ -112,7 +113,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "virtualbox_guest_os_type": "RedHat_64",
     "atlas_username": "gannett",
     "atlas_token": "",
